@@ -1,3 +1,6 @@
+setclipboard("https://discord.gg/2X6pvucHsS")
+
+
  -- Load Rayfield Library
 local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
