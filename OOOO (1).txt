@@ -1,0 +1,128 @@
+setclipboard("https://discord.gg/2X6pvucHsS")
+
+
+ -- Load Rayfield Library
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+-- Create Main Window
+local Window = Rayfield:CreateWindow({
+    Name = "Universal Hehe Hub",
+    LoadingTitle = "Loading Universal Hehe Hub...",
+    LoadingSubtitle = "by idontthinkthismatters",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "UniversalHeheHub",
+        FileName = "idontthinkthismatters"
+    },
+    Discord = {
+        Enabled = false, 
+        Invite = "", -- Your Discord server link (optional)
+        RememberJoins = true
+    },
+    KeySystem = false 
+})
+
+-- Create Tabs
+local ScriptsTab = Window:CreateTab("Main Scripts", 4483362458)
+local KeyScriptsTab = Window:CreateTab("Key Scripts", 4483362458)
+local MiscTab = Window:CreateTab("Misc", 4483362458)
+local CreditsTab = Window:CreateTab("Credits", 4483362458)
+local UpdlogTab = Window:CreateTab("Updlog", 4483362458)
+
+-- Scripts Tab Buttons
+local scripts = {
+    {Name = "Load Fly GUI", URL = "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
+    {Name = "Infinite Yield", URL = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+    {Name = "CMD-X", URL = "https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source"},
+    {Name = "OctoSpy", URL = "https://raw.githubusercontent.com/InfernusScripts/Octo-Spy/refs/heads/main/Main.lua"},
+    {Name = "Trashcan Moveset", URL = "https://raw.githubusercontent.com/yes1nt/yes/refs/heads/main/Trashcan%20Man"},
+    {Name = "ScriptHub V3", URL = "https://rawscripts.net/raw/Universal-Script-ScriptHub-V3-Best-Mobile-ScriptHub-Keyless-16115"},
+    {Name = "QuirkyCMD 2", URL = "https://rawscripts.net/raw/Universal-Script-QuirkyCMD-2-28532"},
+    {Name = "Invisible Script", URL = "https://rawscripts.net/raw/Universal-Script-Invisible-script-20557"},
+    {Name = "Badge Hub (Slap Battles)", URL = "https://raw.githubusercontent.com/IncognitoScripts/SlapBattles/refs/heads/main/BadgeHub"},
+    {Name = "Elemental Powers Tycoon", URL = "https://scriptblox.com/raw/Elemental-Powers-Tycoon-OuxiHub-equip-any-power-11360"},
+    {Name = "Orbit GUI", URL = "https://raw.githubusercontent.com/long191910/all-my-roblox-script/refs/heads/main/orbit.lua"},
+    {Name = "Electro GUI", URL = "https://paste.ee/r/yHoJNbhj"},
+    {Name = "Hitbox", URL = "https://pastefy.app/ItfO0tdg/raw"},
+    {Name = "Gui maker", URL = "https://pastefy.app/EOgPqinS/raw"},
+    {Name = "The darkones Brookhaven", URL = "https://raw.githubusercontent.com/TheDarkoneMarcillisePex/Other-Scripts/main/Brook%20Haven%20Gui"},
+     {Name = "model inserter (studio lite)", URL = "https://raw.githubusercontent.com/Allvideo1/My-script-/refs/heads/main/Model%20Inserter.lua"},
+     {Name = "Touch Fling (Needs collision)",
+     URL = "https://raw.githubusercontent.com/miso517/scirpt/refs/heads/main/main.lua"},
+     {Name = "Bring parts", URL =  "https://pastebin.com/raw/TihMhyyh"},
+     {Name = "Ghost hub admin", URL = "https://raw.githubusercontent.com/GhostPlayer352/Test4/main/GhostHub"},
+     {Name = "Super ring part made by Lucas v6", URL = "https://raw.githubusercontent.com/chesslovers69/Super-ring-parts-v6/refs/heads/main/Bylukaslol"},
+     {Name = "Studio lite hub (Studio lite)", URL = "https://raw.githubusercontent.com/Allvideo1/My-script-/refs/heads/main/StudioHub"}}
+
+
+for _, script in pairs(scripts) do
+    ScriptsTab:CreateButton({
+        Name = script.Name,
+        Callback = function()
+            loadstring(game:HttpGet(script.URL))()
+        end
+    })
+end
+
+-- Key Scripts Tab
+KeyScriptsTab:CreateButton({
+    Name = "HOHO Hub",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"))()
+    end
+})
+
+-- Misc Tab Features
+MiscTab:CreateToggle({
+    Name = "Auto Random TP (Behind Player)",
+    CurrentValue = false,
+    Callback = function(state)
+        getgenv().AutoTP = state
+        while getgenv().AutoTP do
+            task.wait(1)
+            local players = game:GetService("Players"):GetPlayers()
+            local target = players[math.random(1, #players)]
+            if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+                hrp.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2)
+            end
+        end
+    end
+})
+
+MiscTab:CreateInput({
+    Name = "Set HipHeight",
+    PlaceholderText = "2",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(value)
+        game.Players.LocalPlayer.Character.Humanoid.HipHeight = tonumber(value)
+    end
+})
+
+MiscTab:CreateToggle({
+    Name = "Anti-Sit",
+    CurrentValue = false,
+    Callback = function(state)
+        getgenv().AntiSit = state
+        while getgenv().AntiSit do
+            task.wait(0.1)
+            local humanoid = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.Sit then
+                humanoid.Sit = false
+            end
+        end
+    end
+})
+
+-- Credits Tab
+CreditsTab:CreateLabel("Special Thanks: Golden Head, ChatGPT, Incognito Scripts, Patrick,allvideo, Lucas and others :)")
+
+-- Update Log Tab
+UpdlogTab:CreateLabel("1.1 Update Added Badge hub And Elemental powers tycoon")
+UpdlogTab:CreateLabel("1.2 Added Updlog and Orbit GUI")
+UpdlogTab:CreateLabel("1.3 Added Gui maker, Hitbox,The darkones Brookhaven and hoho hub in key scripts and model inserter and touch fling and bring parts")
+UpdlogTab:CreateLabel("Added GhostHub,Super-ring-parts-v6 and StudioHub")
+
+-- Finalizing UI
+Rayfield:LoadConfiguration()
+
