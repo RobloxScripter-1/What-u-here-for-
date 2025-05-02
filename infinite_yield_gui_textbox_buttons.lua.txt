@@ -1,0 +1,178 @@
+-- Infinite Yield-Inspired GUI with Textboxes and Buttons for Fly Speed, Jump Power, and Walk Speed
+
+-- Create the Screen GUI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = game.CoreGui
+ScreenGui.Name = "InfiniteYieldStyleGUI"
+
+-- Create the Main Frame
+local MainFrame = Instance.new("Frame")
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.BorderSizePixel = 0
+MainFrame.Position = UDim2.new(0.4, 0, 0.4, 0)
+MainFrame.Size = UDim2.new(0, 300, 0, 350)
+MainFrame.Visible = true
+
+-- UI Corner for Rounded Edges
+local UICorner = Instance.new("UICorner")
+UICorner.Parent = MainFrame
+UICorner.CornerRadius = UDim.new(0, 10)
+
+-- Title Label
+local Title = Instance.new("TextLabel")
+Title.Parent = MainFrame
+Title.Text = "Infinite Yield Style GUI"
+Title.Font = Enum.Font.GothamSemibold
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.BackgroundTransparency = 1
+Title.Position = UDim2.new(0, 0, 0, -30)
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.TextSize = 16
+
+-- Fly Speed Section
+local FlyLabel = Instance.new("TextLabel")
+FlyLabel.Parent = MainFrame
+FlyLabel.Text = "Fly Speed:"
+FlyLabel.Font = Enum.Font.Gotham
+FlyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlyLabel.BackgroundTransparency = 1
+FlyLabel.Position = UDim2.new(0.1, 0, 0.1, 0)
+FlyLabel.Size = UDim2.new(0, 100, 0, 30)
+FlyLabel.TextSize = 14
+
+local FlyTextBox = Instance.new("TextBox")
+FlyTextBox.Parent = MainFrame
+FlyTextBox.Text = "50"
+FlyTextBox.Font = Enum.Font.Gotham
+FlyTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlyTextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+FlyTextBox.Position = UDim2.new(0.5, 0, 0.1, 0)
+FlyTextBox.Size = UDim2.new(0, 100, 0, 30)
+FlyTextBox.TextSize = 14
+
+local FlyButton = Instance.new("TextButton")
+FlyButton.Parent = MainFrame
+FlyButton.Text = "Set Fly Speed"
+FlyButton.Font = Enum.Font.Gotham
+FlyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+FlyButton.Position = UDim2.new(0.3, 0, 0.2, 0)
+FlyButton.Size = UDim2.new(0, 100, 0, 30)
+
+-- Jump Power Section
+local JumpLabel = Instance.new("TextLabel")
+JumpLabel.Parent = MainFrame
+JumpLabel.Text = "Jump Power:"
+JumpLabel.Font = Enum.Font.Gotham
+JumpLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+JumpLabel.BackgroundTransparency = 1
+JumpLabel.Position = UDim2.new(0.1, 0, 0.3, 0)
+JumpLabel.Size = UDim2.new(0, 100, 0, 30)
+JumpLabel.TextSize = 14
+
+local JumpTextBox = Instance.new("TextBox")
+JumpTextBox.Parent = MainFrame
+JumpTextBox.Text = "100"
+JumpTextBox.Font = Enum.Font.Gotham
+JumpTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+JumpTextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+JumpTextBox.Position = UDim2.new(0.5, 0, 0.3, 0)
+JumpTextBox.Size = UDim2.new(0, 100, 0, 30)
+JumpTextBox.TextSize = 14
+
+local JumpButton = Instance.new("TextButton")
+JumpButton.Parent = MainFrame
+JumpButton.Text = "Set Jump Power"
+JumpButton.Font = Enum.Font.Gotham
+JumpButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+JumpButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+JumpButton.Position = UDim2.new(0.3, 0, 0.4, 0)
+JumpButton.Size = UDim2.new(0, 100, 0, 30)
+
+-- Walk Speed Section
+local SpeedLabel = Instance.new("TextLabel")
+SpeedLabel.Parent = MainFrame
+SpeedLabel.Text = "Walk Speed:"
+SpeedLabel.Font = Enum.Font.Gotham
+SpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedLabel.BackgroundTransparency = 1
+SpeedLabel.Position = UDim2.new(0.1, 0, 0.5, 0)
+SpeedLabel.Size = UDim2.new(0, 100, 0, 30)
+SpeedLabel.TextSize = 14
+
+local SpeedTextBox = Instance.new("TextBox")
+SpeedTextBox.Parent = MainFrame
+SpeedTextBox.Text = "16"
+SpeedTextBox.Font = Enum.Font.Gotham
+SpeedTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedTextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+SpeedTextBox.Position = UDim2.new(0.5, 0, 0.5, 0)
+SpeedTextBox.Size = UDim2.new(0, 100, 0, 30)
+SpeedTextBox.TextSize = 14
+
+local SpeedButton = Instance.new("TextButton")
+SpeedButton.Parent = MainFrame
+SpeedButton.Text = "Set Walk Speed"
+SpeedButton.Font = Enum.Font.Gotham
+SpeedButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+SpeedButton.Position = UDim2.new(0.3, 0, 0.6, 0)
+SpeedButton.Size = UDim2.new(0, 100, 0, 30)
+
+-- Apply Button
+local ApplyButton = Instance.new("TextButton")
+ApplyButton.Parent = MainFrame
+ApplyButton.Text = "Apply Custom Values"
+ApplyButton.Font = Enum.Font.Gotham
+ApplyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ApplyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+ApplyButton.Position = UDim2.new(0.3, 0, 0.8, 0)
+ApplyButton.Size = UDim2.new(0, 140, 0, 30)
+
+-- Button Logic
+FlyButton.MouseButton1Click:Connect(function()
+    getgenv().FlySpeed = 50 -- Default speed
+    print("Fly Speed set to 50 (default)")
+end)
+
+JumpButton.MouseButton1Click:Connect(function()
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = 100 -- Default power
+    print("Jump Power set to 100 (default)")
+end)
+
+SpeedButton.MouseButton1Click:Connect(function()
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16 -- Default speed
+    print("Walk Speed set to 16 (default)")
+end)
+
+ApplyButton.MouseButton1Click:Connect(function()
+    -- Update Fly Speed
+    local FlySpeed = tonumber(FlyTextBox.Text)
+    if FlySpeed and FlySpeed > 0 then
+        getgenv().FlySpeed = FlySpeed
+        print("Fly Speed set to " .. FlySpeed)
+    else
+        warn("Invalid Fly Speed!")
+    end
+
+    -- Update Jump Power
+    local JumpPower = tonumber(JumpTextBox.Text)
+    if JumpPower and JumpPower > 0 then
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = JumpPower
+        print("Jump Power set to " .. JumpPower)
+    else
+        warn("Invalid Jump Power!")
+    end
+
+    -- Update Walk Speed
+    local WalkSpeed = tonumber(SpeedTextBox.Text)
+    if WalkSpeed and WalkSpeed > 0 then
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WalkSpeed
+        print("Walk Speed set to " .. WalkSpeed)
+    else
+        warn("Invalid Walk Speed!")
+    end
+end)
+
+print("Infinite Yield Style GUI with Textboxes and Buttons Loaded!")
