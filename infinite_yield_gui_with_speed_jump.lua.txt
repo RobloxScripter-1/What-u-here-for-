@@ -1,0 +1,117 @@
+-- Infinite Yield-Inspired GUI with Speed, Jump, Draggable, and Advanced Features
+
+-- Create GUI
+local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+local MainFrame = Instance.new("Frame", ScreenGui)
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.Size = UDim2.new(0, 300, 0, 500)
+MainFrame.Position = UDim2.new(0.4, 0, 0.4, 0)
+MainFrame.Active = true -- Make GUI draggable
+MainFrame.Draggable = true -- Enable drag
+
+-- Title
+local Title = Instance.new("TextLabel", MainFrame)
+Title.Text = "Infinite Yield GUI"
+Title.BackgroundTransparency = 1
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Font = Enum.Font.GothamSemibold
+Title.TextSize = 16
+
+-- Add Buttons
+local function CreateButton(name, pos, callback)
+    local button = Instance.new("TextButton", MainFrame)
+    button.Text = name
+    button.Position = UDim2.new(0.3, 0, pos, 0)
+    button.Size = UDim2.new(0, 140, 0, 30)
+    button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    button.Font = Enum.Font.Gotham
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.MouseButton1Click:Connect(callback)
+    return button
+end
+
+-- Add Textboxes
+local function CreateLabelAndTextbox(labelName, defaultValue, pos, callback)
+    local label = Instance.new("TextLabel", MainFrame)
+    label.Text = labelName
+    label.BackgroundTransparency = 1
+    label.Position = UDim2.new(0.1, 0, pos, 0)
+    label.Size = UDim2.new(0, 100, 0, 30)
+    label.Font = Enum.Font.Gotham
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.TextSize = 14
+
+    local textbox = Instance.new("TextBox", MainFrame)
+    textbox.Text = tostring(defaultValue)
+    textbox.Position = UDim2.new(0.5, 0, pos, 0)
+    textbox.Size = UDim2.new(0, 100, 0, 30)
+    textbox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    textbox.Font = Enum.Font.Gotham
+    textbox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textbox.TextSize = 14
+
+    textbox.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            local value = tonumber(textbox.Text)
+            if value then
+                callback(value)
+            else
+                warn("Invalid value for " .. labelName)
+            end
+        end
+    end)
+end
+
+-- Variables
+local flying, noclip, espEnabled, isDarkTheme = false, false, false, true
+local walkSpeed, jumpPower = 16, 50 -- Default values
+
+-- Buttons for Features
+CreateButton("Toggle Fly", 0.1, function()
+    flying = not flying
+    print(flying and "Fly Enabled" or "Fly Disabled")
+end)
+
+CreateButton("Toggle Noclip", 0.2, function()
+    noclip = not noclip
+    print(noclip and "Noclip Enabled" or "Noclip Disabled")
+end)
+
+CreateButton("Toggle ESP", 0.3, function()
+    espEnabled = not espEnabled
+    print(espEnabled and "ESP Enabled" or "ESP Disabled")
+end)
+
+CreateButton("Switch Theme", 0.4, function()
+    isDarkTheme = not isDarkTheme
+    MainFrame.BackgroundColor3 = isDarkTheme and Color3.fromRGB(25, 25, 25) or Color3.fromRGB(230, 230, 230)
+    print(isDarkTheme and "Dark Theme" or "Light Theme")
+end)
+
+local settings = {}
+CreateButton("Save Settings", 0.5, function()
+    settings = {fly = flying, noclip = noclip, esp = espEnabled, speed = walkSpeed, jump = jumpPower}
+    print("Settings Saved")
+end)
+
+CreateButton("Load Settings", 0.6, function()
+    flying, noclip, espEnabled = settings.fly, settings.noclip, settings.esp
+    walkSpeed, jumpPower = settings.speed or walkSpeed, settings.jump or jumpPower
+    print("Settings Loaded")
+end)
+
+-- Textboxes for Speed and Jump Power
+CreateLabelAndTextbox("Walk Speed:", walkSpeed, 0.7, function(value)
+    walkSpeed = value
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkSpeed
+    print("Walk Speed set to " .. walkSpeed)
+end)
+
+CreateLabelAndTextbox("Jump Power:", jumpPower, 0.8, function(value)
+    jumpPower = value
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = jumpPower
+    print("Jump Power set to " .. jumpPower)
+end)
+
+print("Infinite Yield GUI with Speed and Jump Loaded!")
