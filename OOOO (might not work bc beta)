@@ -73,6 +73,127 @@ KeyScriptsTab:CreateButton({
 })
 
 -- Misc Tab Features
+
+-- Rayfield Theme Manager: Dropdown, Custom RGB, Save/Load Theme
+
+--[[ 
+Place this after MiscTab is created in your Rayfield-based script hub.
+It adds:
+- Dropdown for preset accent themes (Red, Blue, Green, Pink, White)
+- Custom RGB input & set button for user-defined accent color
+- Save and Load buttons for .current theme (session memory)
+]]
+
+-- Theme presets table
+local colorThemes = {
+    ["Red"] = {Accent = Color3.fromRGB(255, 0, 0)},
+    ["Blue"] = {Accent = Color3.fromRGB(0, 120, 255)},
+    ["Green"] = {Accent = Color3.fromRGB(0, 255, 0)},
+    ["Pink"] = {Accent = Color3.fromRGB(255, 0, 200)},
+    ["White"] = {
+        Background = Color3.fromRGB(245,245,245),
+        Text = Color3.fromRGB(35,35,35),
+        Accent = Color3.fromRGB(255,255,255),
+        TabBackground = Color3.fromRGB(230,230,230)
+    }
+}
+
+-- Default theme
+local savedTheme = {
+    Background = Color3.fromRGB(24,24,24),
+    Text = Color3.fromRGB(245,245,245),
+    Accent = Color3.fromRGB(0,120,255),
+    TabBackground = Color3.fromRGB(30,30,30)
+}
+
+-- Function to apply and store the current theme
+local function applyTheme(theme)
+    Rayfield:SetTheme(theme)
+    for k, v in pairs(theme) do
+        savedTheme[k] = v
+    end
+end
+
+-- Dropdown for preset accent themes
+MiscTab:CreateDropdown({
+    Name = "Theme Color Presets",
+    Options = {"Red", "Blue", "Green", "Pink", "White"},
+    CurrentOption = "Blue",
+    Callback = function(selected)
+        local theme = colorThemes[selected]
+        if theme then
+            applyTheme({
+                Background = theme.Background or savedTheme.Background,
+                Text = theme.Text or savedTheme.Text,
+                Accent = theme.Accent,
+                TabBackground = theme.TabBackground or savedTheme.TabBackground
+            })
+            Rayfield:Notify("Theme Changed", "Theme set to "..selected, 2)
+        end
+    end
+})
+
+-- Function to parse R,G,B string
+local function parseRGB(input)
+    local split = {}
+    for v in string.gmatch(input, "[^,]+") do
+        table.insert(split, tonumber(v:match("%d+")))
+    end
+    if #split == 3 and split[1] and split[2] and split[3] then
+        return Color3.fromRGB(split[1], split[2], split[3])
+    end
+    return nil
+end
+
+-- Custom RGB input & set button
+local userRGB = "0,120,255"
+
+MiscTab:CreateInput({
+    Name = "Custom Accent RGB",
+    PlaceholderText = "R,G,B (e.g. 255,0,0)",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(txt)
+        userRGB = txt
+    end
+})
+
+MiscTab:CreateButton({
+    Name = "Set Custom Accent Color",
+    Callback = function()
+        local color = parseRGB(userRGB)
+        if color then
+            applyTheme({
+                Background = savedTheme.Background,
+                Text = savedTheme.Text,
+                Accent = color,
+                TabBackground = savedTheme.TabBackground
+            })
+            Rayfield:Notify("Theme Changed", "Accent set to: "..userRGB, 2)
+        else
+            Rayfield:Notify("Invalid Input", "Enter as R,G,B (0-255)", 2)
+        end
+    end
+})
+
+-- Save current theme button
+MiscTab:CreateButton({
+    Name = "Save Current Color Theme",
+    Callback = function()
+        Rayfield:Notify("Theme Saved", "Your current color theme has been saved!", 2)
+    end
+})
+
+-- Load saved theme button
+MiscTab:CreateButton({
+    Name = "Load Saved Color Theme",
+    Callback = function()
+        Rayfield:SetTheme(savedTheme)
+        Rayfield:Notify("Theme Loaded", "Your saved color theme has been loaded!", 2)
+    end
+})
+
+-- Usage note: Whenever you change a theme via dropdown or custom RGB, it is auto-saved to session.
+-- Save/Load only affects in-session memory. For persistent saving, you would need to use file write/load or DataStore.
 MiscTab:CreateToggle({
     Name = "Auto Random TP (Behind Player)",
     CurrentValue = false,
