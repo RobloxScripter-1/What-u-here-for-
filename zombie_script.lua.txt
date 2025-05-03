@@ -1,0 +1,177 @@
+-- Zombie Script for KRNL: Follows Players and Attacks Them
+-- Ensure this script is run using a supported executor like KRNL.
+
+-- Create the zombie model
+local zombie = Instance.new("Model")
+zombie.Name = "Zombie"
+zombie.Parent = workspace -- Add the zombie to the game workspace
+
+-- Create the HumanoidRootPart
+local rootPart = Instance.new("Part")
+rootPart.Name = "HumanoidRootPart"
+rootPart.Size = Vector3.new(2, 2, 1)
+rootPart.Position = Vector3.new(0, 5, 0) -- Adjust position as needed
+rootPart.Anchored = false
+rootPart.CanCollide = true
+rootPart.Parent = zombie
+
+-- Create the Humanoid
+local humanoid = Instance.new("Humanoid")
+humanoid.Parent = zombie
+
+-- Set the Humanoid's health
+humanoid.MaxHealth = 5000 -- Maximum health
+humanoid.Health = 5000 -- Current health
+
+-- Create the Head
+local head = Instance.new("Part")
+head.Name = "Head"
+head.Size = Vector3.new(2, 1, 1)
+head.Position = rootPart.Position + Vector3.new(0, 2.5, 0)
+head.Anchored = false
+head.CanCollide = true
+head.BrickColor = BrickColor.new("Bright red") -- Red head for zombie
+head.Parent = zombie
+
+-- Add a Mesh to the Head for a round appearance
+local headMesh = Instance.new("SpecialMesh")
+headMesh.MeshType = Enum.MeshType.Head
+headMesh.Scale = Vector3.new(1.25, 1.25, 1.25) -- Slightly larger than default
+headMesh.Parent = head
+
+-- Create the Torso
+local torso = Instance.new("Part")
+torso.Name = "Torso"
+torso.Size = Vector3.new(2, 2, 1)
+torso.Position = rootPart.Position + Vector3.new(0, 1, 0)
+torso.Anchored = false
+torso.CanCollide = true
+torso.BrickColor = BrickColor.new("Dark green") -- Green torso for zombie
+torso.Parent = zombie
+
+-- Create Left Arm
+local leftArm = Instance.new("Part")
+leftArm.Name = "Left Arm"
+leftArm.Size = Vector3.new(1, 2, 1)
+leftArm.Position = torso.Position + Vector3.new(-1.5, 0, 0)
+leftArm.Anchored = false
+leftArm.CanCollide = true
+leftArm.BrickColor = BrickColor.new("Bright green")
+leftArm.Parent = zombie
+
+-- Create Right Arm
+local rightArm = Instance.new("Part")
+rightArm.Name = "Right Arm"
+rightArm.Size = Vector3.new(1, 2, 1)
+rightArm.Position = torso.Position + Vector3.new(1.5, 0, 0)
+rightArm.Anchored = false
+rightArm.CanCollide = true
+rightArm.BrickColor = BrickColor.new("Bright green")
+rightArm.Parent = zombie
+
+-- Create Left Leg
+local leftLeg = Instance.new("Part")
+leftLeg.Name = "Left Leg"
+leftLeg.Size = Vector3.new(1, 2, 1)
+leftLeg.Position = torso.Position + Vector3.new(-0.5, -2, 0)
+leftLeg.Anchored = false
+leftLeg.CanCollide = true
+leftLeg.BrickColor = BrickColor.new("Black")
+leftLeg.Parent = zombie
+
+-- Create Right Leg
+local rightLeg = Instance.new("Part")
+rightLeg.Name = "Right Leg"
+rightLeg.Size = Vector3.new(1, 2, 1)
+rightLeg.Position = torso.Position + Vector3.new(0.5, -2, 0)
+rightLeg.Anchored = false
+rightLeg.CanCollide = true
+rightLeg.BrickColor = BrickColor.new("Black")
+rightLeg.Parent = zombie
+
+-- Weld all parts together
+local function weldParts(part1, part2)
+    local weld = Instance.new("WeldConstraint")
+    weld.Part0 = part1
+    weld.Part1 = part2
+    weld.Parent = part1
+end
+
+weldParts(rootPart, head)
+weldParts(rootPart, torso)
+weldParts(torso, leftArm)
+weldParts(torso, rightArm)
+weldParts(torso, leftLeg)
+weldParts(torso, rightLeg)
+
+-- Enable animations by setting the HumanoidRootPart
+humanoid.RootPart = rootPart
+
+-- Health System Logic
+local function takeDamage(damage)
+    humanoid.Health = humanoid.Health - damage
+    print("Zombie Health: " .. humanoid.Health)
+
+    if humanoid.Health <= 0 then
+        print("The Zombie has died!")
+        humanoid.Health = 0
+        -- Optional: Add death effects or remove the zombie
+        zombie:Destroy()
+    end
+end
+
+-- Detect when a tool (e.g. sword) hits the zombie
+zombie.DescendantAdded:Connect(function(child)
+    if child:IsA("Part") then
+        child.Touched:Connect(function(hit)
+            local tool = hit.Parent:FindFirstChild("Tool")
+            if tool then
+                takeDamage(20) -- Take 20 damage per hit
+            end
+        end)
+    end
+end)
+
+-- Function to find the nearest player
+local function findNearestPlayer()
+    local nearestPlayer = nil
+    local shortestDistance = math.huge -- Start with a very large number
+
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        local character = player.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            local distance = (character.HumanoidRootPart.Position - rootPart.Position).Magnitude
+            if distance < shortestDistance then
+                shortestDistance = distance
+                nearestPlayer = character
+            end
+        end
+    end
+
+    return nearestPlayer
+end
+
+-- Function to make the zombie follow the nearest player and attack
+local function zombieBehavior()
+    while humanoid.Health > 0 do
+        local targetPlayer = findNearestPlayer()
+        if targetPlayer then
+            local targetPosition = targetPlayer.HumanoidRootPart.Position
+            humanoid:MoveTo(targetPosition) -- Move to the target's position
+
+            -- Check if zombie is close enough to attack
+            if (rootPart.Position - targetPosition).Magnitude < 3 then
+                -- Attack player (reduce player's health)
+                local targetHumanoid = targetPlayer:FindFirstChild("Humanoid")
+                if targetHumanoid then
+                    targetHumanoid:TakeDamage(10) -- Deal 10 damage per attack
+                    print("Zombie attacked " .. targetPlayer.Name)
+                end
+            end
+        end
+        wait(0.5) -- Update every 0.5 seconds
+    end
+end
+
+-- Start the zombie behavior
+task.spawn(zombieBehavior)
